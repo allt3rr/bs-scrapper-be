@@ -16,7 +16,7 @@ def olx_scrapper(soup):
             "id": i,
             "name": name,
             "salary": salary,
-            "link": link
+            "link": "https://olx.pl" + link
         })
 
     return {"title": "OLX oferty pracy", "offers": offers}
