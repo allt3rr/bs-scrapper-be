@@ -27,7 +27,7 @@ URL = 'https://www.olx.pl/praca/zawiercie/?search%5Bdist%5D=30&search%5Bfilter_e
 def root():
     return {"message": "API is running!"}
 
-@app.get('/data')
+@app.get('/scrapper')
 def get_data(provider: str):
     resp = requests.get(URL, headers={"User-Agent": "Mozilla/5.0"})
     soup = BeautifulSoup(resp.text, 'html.parser')
