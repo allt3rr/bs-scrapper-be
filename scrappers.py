@@ -34,4 +34,4 @@ def olx_scrapper(soup):
             "contract_type": contract_type,
         })
 
-    return {"title": "OLX oferty pracy", "offers": offers}
+    return {"title": "OLX oferty pracy", 'count': str(len(offers)) , "offers": offers}
