@@ -19,21 +19,36 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-URL = 'https://www.olx.pl/praca/zawiercie/?search%5Bdist%5D=30&search%5Bfilter_enum_type%5D%5B0%5D=halftime&search%5Bfilter_enum_type%5D%5B1%5D=seasonal&search%5Bfilter_enum_type%5D%5B2%5D=parttime&search%5Bfilter_enum_special_requirements%5D%5B0%5D=student_status&search%5Bfilter_enum_agreement%5D%5B0%5D=zlecenie&search%5Bfilter_enum_agreement%5D%5B1%5D=practice'
-# URL = 'https://www.olx.pl/praca/zawiercie'
-
 @app.get('/')
 def root():
     return {"message": "API is running!"}
 
 @app.get('/scrapper')
-def get_data(provider: str):
-    resp = requests.get(URL, headers={"User-Agent": "Mozilla/5.0"})
-    soup = BeautifulSoup(resp.text, 'html.parser')
+def get_data(provider: str, type: str, city: str):
 
     match provider:
         case 'olx':
+            OLX_URL = f"https://www.olx.pl/praca/{city}/?search%5Bdist%5D=15"
+
+            searchParamsURL = ""
+            if (type == "student_status"):
+                searchParamsURL = "&search%5Bfilter_enum_special_requirements%5D%5B0%5D=student_status";
+            
+
+            if (type == "remote_work_possibility"):
+                searchParamsURL = "&search%5Bfilter_enum_workplace%5D%5B0%5D=remote_work_possibility";
+            
+
+            otherJobTypes = ["fulltime", "parttime", "halftime", "seasonal"];
+
+            if (type in otherJobTypes):
+                searchParamsURL = f"&search%5Bfilter_enum_type%5D%5B0%5D={type}";
+            
+
+            OLX_URL += searchParamsURL;
+            resp = requests.get(OLX_URL, headers={"User-Agent": "Mozilla/5.0"})
+            soup = BeautifulSoup(resp.text, 'html.parser')
+            print(OLX_URL)
             return olx_scrapper(soup)
         case _: 
             return {"message": 'Brak takiego dostawcy!'}
