@@ -1,9 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-import requests
-from bs4 import BeautifulSoup
-
 from scrappers import olx_scrapper
 
 app = FastAPI()
@@ -46,9 +43,7 @@ def get_data(provider: str, type: str, city: str):
             
 
             OLX_URL += searchParamsURL;
-            resp = requests.get(OLX_URL, headers={"User-Agent": "Mozilla/5.0"})
-            soup = BeautifulSoup(resp.text, 'html.parser')
-            print(OLX_URL)
-            return olx_scrapper(soup)
+
+            return olx_scrapper(OLX_URL)
         case _: 
             return {"message": 'Brak takiego dostawcy!'}
